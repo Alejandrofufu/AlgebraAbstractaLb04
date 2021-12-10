@@ -1,9 +1,18 @@
 #include<bits/stdc++.h>
 #include <math.h>
 using namespace std;
-unsigned long long exponente(long long p,long long g,long long x){
-    unsigned long long aux = pow(g,x);
-    return aux%p;
+
+long long  modular(unsigned long long  base, unsigned long long  exp, unsigned long long  mod) {
+    long long  x = 1;
+    int i;
+    long long  power = base % mod;
+    for (i = 0; i < sizeof(int) * 64; i++) {
+        int least_sig_bit = 0x00000001 & (exp >> i);
+        if (least_sig_bit)
+            x = (x * power) % mod;
+        power = (power * power) % mod;
+    }
+    return x;
 }
 bool isPrimeNumber(long long n) {
    if (n <= 1) return false;
@@ -67,12 +76,14 @@ int main() {
    cout<<" la raiz primitiva mas pequeña de "<<n<<" es "<<g<<"\n";
 
    /////////////////////////////////////
-   unsigned long long o;
-   for(long long i = 0;i<n-1;i++){
-       o = exponente(n,g,i);
+   long long o;
+   for(x = 1;x<n-1;x++){
+       o = modular(g,x,n);
        //cout<<"\n"<<g<<" ^ "<<i<<" mod "<<n<<" = "<<o;
        if(o == 2021)break;
    }
-   cout<<"x es "<<o;
+   cout<<g<<" ^ x mod " <<n<<" es 2021 cuando x es "<<x;
+   x = modular(g,x,n);
+   cout<<"\nresultado: "<<x;
    return 0;
 }
